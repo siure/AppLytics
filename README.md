@@ -1,4 +1,4 @@
-# Resume Modifier
+# AppLytics
 
 An AI-powered web application that automatically modifies LaTeX resumes to better match specific job descriptions. The tool uses AI models (OpenAI or Google GenAI) to intelligently rephrase and optimize resume content while preserving all factual information and ensuring the resume fits on a single page.
 
