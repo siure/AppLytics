@@ -19,6 +19,7 @@ An AI-powered web application that automatically modifies LaTeX resumes to bette
 - Node.js 18+ installed
 - npm, yarn, pnpm, or bun
 - **Tectonic** (LaTeX compiler) - required for PDF compilation
+- **poppler-utils** (PDF tools: pdfinfo, pdftoppm, pdftotext) - required for PDF analysis
 - An API key from OpenAI or Google GenAI
 
 ### Installation
@@ -40,7 +41,13 @@ chmod +x scripts/install-tectonic.sh
    - **Linux**: `cargo install tectonic` or use your distribution's package manager
    - **Windows**: `cargo install tectonic` or download from [GitHub releases](https://github.com/tectonic-typesetting/tectonic/releases)
 
-3. Install Node.js dependencies:
+3. Install poppler-utils (PDF tools):
+   - **macOS**: `brew install poppler`
+   - **Linux (Debian/Ubuntu)**: `sudo apt-get install poppler-utils`
+   - **Linux (Arch)**: `sudo pacman -S poppler`
+   - **Windows**: `choco install poppler` or download from [poppler releases](https://github.com/oschwartz10612/poppler-windows/releases)
+
+4. Install Node.js dependencies:
 ```bash
 npm install
 # or
@@ -49,7 +56,7 @@ yarn install
 pnpm install
 ```
 
-4. (Optional) Set environment variables in `.env.local`:
+5. (Optional) Set environment variables in `.env.local`:
 ```bash
 OPENAI_API_KEY=your_openai_key
 GOOGLE_GENAI_API_KEY=your_google_key
