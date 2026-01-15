@@ -2,6 +2,10 @@
 
 import { useState } from 'react';
 import { Provider } from '@/lib/models';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Key, Lock, ExternalLink, Eye, EyeOff } from 'lucide-react';
 
 interface ApiKeyInputProps {
   value: string;
@@ -14,14 +18,14 @@ const providerConfig = {
   openai: {
     label: 'OpenAI API Key',
     placeholder: 'sk-...',
-    iconColor: 'text-emerald-400',
+    iconColor: 'text-primary',
     linkText: 'Get your API key',
     linkUrl: 'https://platform.openai.com/api-keys',
   },
   google: {
     label: 'Google API Key',
     placeholder: 'AIza...',
-    iconColor: 'text-blue-400',
+    iconColor: 'text-primary',
     linkText: 'Get your API key',
     linkUrl: 'https://aistudio.google.com/app/apikey',
   },
@@ -45,7 +49,7 @@ export default function ApiKeyInput({ value, onChange, provider, onProviderChang
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     onChange(newValue);
-    
+
     // Auto-detect provider from API key prefix
     if (onProviderChange) {
       const detectedProvider = detectProvider(newValue);
@@ -56,14 +60,12 @@ export default function ApiKeyInput({ value, onChange, provider, onProviderChang
   };
 
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center justify-between mb-3">
-        <label className={`flex items-center gap-2 text-sm font-semibold text-foreground`}>
-          <svg className={`w-4 h-4 ${config.iconColor}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-          </svg>
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <Label className="flex items-center gap-2 text-sm font-semibold">
+          <Key className={`w-4 h-4 ${config.iconColor}`} />
           {config.label}
-        </label>
+        </Label>
         <a
           href={config.linkUrl}
           target="_blank"
@@ -71,31 +73,30 @@ export default function ApiKeyInput({ value, onChange, provider, onProviderChang
           className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
         >
           {config.linkText}
-          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-          </svg>
+          <ExternalLink className="w-3 h-3" />
         </a>
       </div>
       <div className="relative group">
-        <input
+        <Input
           type={showKey ? 'text' : 'password'}
           value={value}
           onChange={handleChange}
           placeholder={config.placeholder}
-          className="clean-input w-full p-4 pr-20 rounded-xl text-foreground text-sm placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/20"
+          className="pr-20 h-12"
         />
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => setShowKey(!showKey)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 px-3 py-1 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-secondary rounded-md transition-colors"
+          className="absolute right-2 top-1/2 -translate-y-1/2 h-8 px-2"
         >
-          {showKey ? 'Hide' : 'Show'}
-        </button>
+          {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+          <span className="ml-1 text-xs">{showKey ? 'Hide' : 'Show'}</span>
+        </Button>
       </div>
-      <p className="mt-2 text-xs text-muted-foreground flex items-center gap-1.5">
-        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-        </svg>
+      <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+        <Lock className="w-3 h-3" />
         Your key is processed securely and never stored.
       </p>
     </div>
