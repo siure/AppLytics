@@ -18,6 +18,7 @@ An AI-powered web application that automatically modifies LaTeX resumes to bette
 
 - Node.js 18+ installed
 - npm, yarn, pnpm, or bun
+- **Tectonic** (LaTeX compiler) - required for PDF compilation
 - An API key from OpenAI or Google GenAI
 
 ### Installation
@@ -28,7 +29,18 @@ git clone <repository-url>
 cd resumeModifier
 ```
 
-2. Install dependencies:
+2. Install Tectonic (LaTeX compiler):
+```bash
+chmod +x scripts/install-tectonic.sh
+./scripts/install-tectonic.sh
+```
+
+   The installer will detect your OS and provide installation options. Alternatively, you can install Tectonic manually:
+   - **macOS**: `brew install tectonic` or `cargo install tectonic`
+   - **Linux**: `cargo install tectonic` or use your distribution's package manager
+   - **Windows**: `cargo install tectonic` or download from [GitHub releases](https://github.com/tectonic-typesetting/tectonic/releases)
+
+3. Install Node.js dependencies:
 ```bash
 npm install
 # or
@@ -37,7 +49,7 @@ yarn install
 pnpm install
 ```
 
-3. (Optional) Set environment variables in `.env.local`:
+4. (Optional) Set environment variables in `.env.local`:
 ```bash
 OPENAI_API_KEY=your_openai_key
 GOOGLE_GENAI_API_KEY=your_google_key
