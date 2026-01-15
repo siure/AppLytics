@@ -1,8 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Resume Modifier
+
+An AI-powered web application that automatically modifies LaTeX resumes to better match specific job descriptions. The tool uses AI models (OpenAI or Google GenAI) to intelligently rephrase and optimize resume content while preserving all factual information and ensuring the resume fits on a single page.
+
+## Features
+
+- **AI-Powered Resume Modification**: Automatically tailors your LaTeX resume to match job descriptions
+- **LaTeX Editor**: Built-in code editor with LaTeX syntax highlighting
+- **PDF Preview**: Real-time PDF preview of your compiled resume
+- **Chat Interface**: Follow-up conversations to refine your resume with additional modifications
+- **Multi-Provider Support**: Works with OpenAI and Google GenAI models
+- **One-Page Optimization**: Automatically ensures your resume fits on exactly one page
+- **Custom Instructions**: Add specific instructions for how you want your resume modified
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ installed
+- npm, yarn, pnpm, or bun
+- An API key from OpenAI or Google GenAI
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd resumeModifier
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+3. (Optional) Set environment variables in `.env.local`:
+```bash
+OPENAI_API_KEY=your_openai_key
+GOOGLE_GENAI_API_KEY=your_google_key
+```
+
+### Running the Application
+
+Start the development server:
 
 ```bash
 npm run dev
@@ -14,23 +57,38 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Usage
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Configure API Access**:
+   - Select your AI provider (OpenAI or Google)
+   - Choose a model
+   - Enter your API key (or it will be loaded from environment variables if set)
 
-## Learn More
+2. **Upload Your Resume**:
+   - Paste your LaTeX resume code into the editor, or upload a PDF that will be converted to LaTeX
 
-To learn more about Next.js, take a look at the following resources:
+3. **Provide Job Description**:
+   - Paste the job offer/description you're applying to
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. **Add Custom Instructions** (Optional):
+   - Specify any particular modifications you want (e.g., "emphasize Python experience", "condense older jobs")
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+5. **Generate Modified Resume**:
+   - Click the modify button to generate an AI-tailored version
+   - The system will automatically ensure the resume fits on one page
 
-## Deploy on Vercel
+6. **Refine with Chat**:
+   - After the initial modification, use the chat interface to request additional changes
+   - Examples: "make the summary more technical", "add more metrics to the first job"
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+7. **Download PDF**:
+   - Once satisfied, download the compiled PDF of your modified resume
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Important Notes
+
+- The AI preserves all factual information (name, contact info, companies, dates, education)
+- Only the wording and emphasis of descriptions are modified to match job keywords
+- The resume is automatically optimized to fit on exactly one page
+- All LaTeX formatting and structure are preserved
