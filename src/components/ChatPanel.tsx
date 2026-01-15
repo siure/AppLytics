@@ -2,6 +2,11 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import ChatMessage, { ChatMessageData } from './ChatMessage';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { MessageCircle, Send, RotateCcw } from 'lucide-react';
 
 interface ChatPanelProps {
   messages: ChatMessageData[];
@@ -50,17 +55,15 @@ export default function ChatPanel({
   }, [handleSend]);
 
   return (
-    <div className="flex flex-col h-full clean-panel p-4 rounded-2xl overflow-hidden shadow-sm">
+    <Card className="flex flex-col h-full overflow-hidden shadow-sm">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4 shrink-0">
+      <CardHeader className="flex flex-row items-center justify-between py-3 px-4 shrink-0 border-b">
         <div className="flex items-center gap-3">
           <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary">
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-            </svg>
+            <MessageCircle className="w-5 h-5" />
           </div>
           <div className="flex flex-col">
-            <h3 className="text-sm font-semibold text-foreground">AI Chat</h3>
+            <h3 className="text-sm font-semibold">AI Chat</h3>
             {jobTitle && (
               <span className="text-[10px] text-muted-foreground truncate max-w-[200px]">
                 Modifying for: {jobTitle}
@@ -68,41 +71,45 @@ export default function ChatPanel({
             )}
           </div>
         </div>
-        
-        <button
+
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={onReset}
-          className="px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-secondary rounded-lg transition-colors"
           title="Start a new modification"
         >
+          <RotateCcw className="w-4 h-4 mr-1" />
           Reset
-        </button>
-      </div>
+        </Button>
+      </CardHeader>
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto min-h-0 space-y-4 pr-2 custom-scrollbar">
-        {messages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
-            <div className="w-12 h-12 mb-3 rounded-full bg-muted flex items-center justify-center">
-              <svg className="w-6 h-6 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
+      <CardContent className="flex-1 p-0 min-h-0 overflow-hidden">
+        <ScrollArea className="h-full p-4">
+          {messages.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full text-muted-foreground py-12">
+              <div className="w-12 h-12 mb-3 rounded-full bg-muted flex items-center justify-center">
+                <MessageCircle className="w-6 h-6 opacity-50" />
+              </div>
+              <p className="text-sm font-medium">No messages yet</p>
+              <p className="text-xs text-muted-foreground mt-1">AI responses will appear here</p>
             </div>
-            <p className="text-sm font-medium">No messages yet</p>
-            <p className="text-xs text-muted-foreground mt-1">AI responses will appear here</p>
-          </div>
-        ) : (
-          messages.map((message) => (
-            <ChatMessage key={message.id} message={message} />
-          ))
-        )}
-        <div ref={messagesEndRef} />
-      </div>
+          ) : (
+            <div className="space-y-4">
+              {messages.map((message) => (
+                <ChatMessage key={message.id} message={message} />
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
+          )}
+        </ScrollArea>
+      </CardContent>
 
       {/* Input Area */}
-      <div className="mt-4 shrink-0">
+      <div className="p-4 border-t shrink-0">
         <div className="flex gap-2">
           <div className="flex-1 relative">
-            <textarea
+            <Textarea
               ref={textareaRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -110,22 +117,21 @@ export default function ChatPanel({
               placeholder="Request changes... (Enter to send, Shift+Enter for newline)"
               disabled={isLoading}
               rows={1}
-              className="clean-input w-full px-4 py-3 rounded-xl text-sm text-foreground placeholder:text-muted-foreground resize-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="resize-none pr-4"
               style={{ maxHeight: '120px' }}
             />
           </div>
-          <button
+          <Button
             onClick={handleSend}
             disabled={!input.trim() || isLoading}
-            className="px-4 py-3 bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground rounded-xl transition-colors shrink-0"
+            size="icon"
+            className="h-auto aspect-square shrink-0"
             title="Send message"
           >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-            </svg>
-          </button>
+            <Send className="w-5 h-5" />
+          </Button>
         </div>
-        
+
         {/* Start New Link */}
         <div className="mt-3 text-center">
           <button
@@ -136,6 +142,6 @@ export default function ChatPanel({
           </button>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

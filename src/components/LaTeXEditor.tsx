@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
 import CodeMirror from '@uiw/react-codemirror';
 import { latex } from 'codemirror-lang-latex';
 import { oneDark } from '@codemirror/theme-one-dark';
@@ -19,7 +20,7 @@ const cleanTheme = EditorView.theme({
   '&': {
     height: '100%',
     fontSize: '13px',
-    backgroundColor: 'var(--background) !important',
+    backgroundColor: 'transparent !important', // Allow container background to show through
   },
   '.cm-scroller': {
     fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
@@ -27,6 +28,7 @@ const cleanTheme = EditorView.theme({
   },
   '.cm-content': {
     padding: '16px',
+    caretColor: 'var(--primary)',
   },
   '&.cm-focused': {
     outline: 'none',
@@ -34,18 +36,26 @@ const cleanTheme = EditorView.theme({
   // Adjust selection color to match app theme
   '.cm-selectionBackground, &.cm-focused .cm-selectionBackground': {
     backgroundColor: 'var(--primary) !important',
-    opacity: '0.3',
+    opacity: '0.2',
   },
   // Adjust cursor color
   '&.cm-focused .cm-cursor': {
     borderLeftColor: 'var(--primary)',
   },
   '.cm-gutters': {
-    backgroundColor: 'var(--background) !important',
+    backgroundColor: 'transparent !important',
     borderRight: '1px solid var(--border) !important',
     color: 'var(--muted-foreground) !important',
   },
-  
+  // Fix for light mode selected line number visibility
+  '.cm-activeLineGutter': {
+    backgroundColor: 'transparent',
+    color: 'var(--primary) !important',
+  },
+  // Active line background
+  '.cm-activeLine': {
+    backgroundColor: 'var(--muted)',
+  },
 });
 
 export default function LaTeXEditor({
@@ -55,21 +65,32 @@ export default function LaTeXEditor({
   className = '',
   readOnly = false,
 }: LaTeXEditorProps) {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const handleChange = useCallback(
     (val: string) => {
       onChange(val);
     },
     [onChange]
-    
   );
+
+  // Determine extensions based on theme
+  const extensions = [latex(), cleanTheme];
+  if (mounted && resolvedTheme === 'dark') {
+    extensions.push(oneDark);
+  }
 
   return (
     <div className={`h-full overflow-hidden border-t border-border bg-muted/30 ${className}`}>
       <CodeMirror
         value={value}
         onChange={handleChange}
-        theme={oneDark}
-        extensions={[latex(), cleanTheme]}
+        extensions={extensions}
         placeholder={placeholder}
         readOnly={readOnly}
         basicSetup={{

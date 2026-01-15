@@ -3,6 +3,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import LaTeXEditor from './LaTeXEditor';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
+import { X } from 'lucide-react';
 
 interface ExpandModalProps {
   isOpen: boolean;
@@ -71,37 +75,36 @@ export default function ExpandModal({
   const modalContent = (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div 
+      <div
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
         onClick={onClose}
       />
-      
+
       {/* Modal */}
-      <div className="relative w-full max-w-4xl h-[80vh] flex flex-col clean-panel rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+      <Card className="relative w-full max-w-4xl h-[80vh] flex flex-col shadow-2xl animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-border shrink-0 bg-muted/30">
+        <CardHeader className="flex flex-row items-center justify-between p-4 border-b shrink-0 bg-muted/30">
           <div className="flex items-center gap-3">
             <div className={`flex items-center justify-center w-8 h-8 rounded-lg ${iconColorClass}`}>
               {icon}
             </div>
-            <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+            <h2 className="text-lg font-semibold">{title}</h2>
           </div>
-          
-          <button
+
+          <Button
+            variant="ghost"
+            size="icon-sm"
             onClick={onClose}
-            className="p-2 text-muted-foreground hover:text-foreground hover:bg-secondary rounded-lg transition-colors"
             title="Close (Esc)"
           >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-        
+            <X className="w-5 h-5" />
+          </Button>
+        </CardHeader>
+
         {/* Content */}
-        <div className="flex-1 p-4 min-h-0">
+        <CardContent className="flex-1 p-4 min-h-0">
           {useCodeEditor ? (
-            <div className="clean-input w-full h-full rounded-xl overflow-hidden border border-input">
+            <div className="w-full h-full rounded-xl overflow-hidden border border-input">
               <LaTeXEditor
                 value={value}
                 onChange={onChange}
@@ -109,32 +112,28 @@ export default function ExpandModal({
               />
             </div>
           ) : (
-            <textarea
+            <Textarea
               ref={textareaRef}
               value={value}
               onChange={(e) => onChange(e.target.value)}
               placeholder={placeholder}
-              className={`clean-input w-full h-full p-4 rounded-xl text-foreground leading-relaxed resize-none placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/20 ${
-                isMonospace ? 'font-mono text-xs' : 'text-sm'
-              }`}
+              className={`w-full h-full resize-none ${isMonospace ? 'font-mono text-xs' : 'text-sm'
+                }`}
               spellCheck={!isMonospace}
             />
           )}
-        </div>
-        
+        </CardContent>
+
         {/* Footer */}
-        <div className="flex items-center justify-between px-4 py-3 border-t border-border shrink-0 bg-muted/30">
+        <CardFooter className="flex items-center justify-between px-4 py-3 border-t shrink-0 bg-muted/30">
           <span className="text-xs text-muted-foreground">
-            Press <kbd className="px-1.5 py-0.5 bg-muted rounded text-foreground font-mono border border-border">Esc</kbd> to close
+            Press <kbd className="px-1.5 py-0.5 bg-muted rounded font-mono border border-border">Esc</kbd> to close
           </span>
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-medium rounded-lg transition-colors"
-          >
+          <Button onClick={onClose}>
             Done
-          </button>
-        </div>
-      </div>
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 
