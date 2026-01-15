@@ -44,6 +44,7 @@ chmod +x scripts/install-tectonic.sh
 3. Install poppler-utils (PDF tools):
    - **macOS**: `brew install poppler`
    - **Linux (Debian/Ubuntu)**: `sudo apt-get install poppler-utils`
+   - **Linux (Fedora)**: `sudo dnf install poppler-utils`
    - **Linux (Arch)**: `sudo pacman -S poppler`
    - **Windows**: `choco install poppler` or download from [poppler releases](https://github.com/oschwartz10612/poppler-windows/releases)
 
